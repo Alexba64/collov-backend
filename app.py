@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import os
 import uuid
 import requests
 
 app = Flask(__name__)
+CORS(app)  # ✅ Abilita CORS
+
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -22,12 +25,12 @@ def generate_image():
     if not style or not room_type:
         return jsonify({"error": "Style o roomType mancanti"}), 400
 
-    # Salva immagine
+    # Salva immagine localmente
     image_name = f"{uuid.uuid4().hex}_{image.filename}"
     image_path = os.path.join(UPLOAD_FOLDER, image_name)
     image.save(image_path)
 
-    # URL pubblico (modifica con il tuo dominio/server se necessario)
+    # URL pubblico dell'immagine (modifica per il tuo caso specifico)
     upload_url = f"https://alexmedia.it/public/arreda/uploads/{image_name}"
 
     payload = {
